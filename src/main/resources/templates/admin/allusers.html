@@ -19,10 +19,10 @@
         <tr th:each="item : ${usersList}">
             <td th:utext="${item.getId()}">Id</td>
             <td th:utext="${item.getUsername()}">UserName</td>
-            <td th:utext="${lst.getName()}">Name</td>
-            <td th:utext="${lst.getEmail()}">Mail</td>
-            <td th:utext="${lst.getPassword()}">Password</td>
-            <td th:utext="${lst.getRoleSet()}">Role</td>
+            <td th:utext="${item.getName()}">Name</td>
+            <td th:utext="${item.getEmail()}">Mail</td>
+            <td th:utext="${item.getPassword()}">Password</td>
+            <td th:utext="${item.getRoles()}">Role</td>
             <td>
                 <a th:href="@{'admin/edit/' + ${item.getId()}}">Edit</a>
 <!--                &nbsp;&nbsp;&nbsp;-->
@@ -31,6 +31,9 @@
         </tr>
 
     </table>
+    <a href="/admin/add">Create New User</a>
+    <br/>
+    <a href="#" th:href="@{/logout}">Log Out</a>
 </div>
 </body>
 </html>

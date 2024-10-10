@@ -36,13 +36,13 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/add")
     public String showAddUserForm(Model model) {
         User user = new User();
         List<Role> roles = userService.getAllRoles();
         model.addAttribute("user", user);
         model.addAttribute("allRoles", roles);
-        return "admin/addUser";
+        return "admin/adduser";
     }
 
     @PostMapping("/save")
@@ -50,7 +50,7 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             List<Role> roles = userService.getAllRoles();
             model.addAttribute("allRoles", roles);
-            return "admin/newUser";
+            return "admin/adduser";
         }
         userService.addUser(user);
         return "redirect:/admin";
@@ -62,7 +62,7 @@ public class AdminController {
         List<Role> roles = userService.getAllRoles();
         model.addAttribute("user", user);
         model.addAttribute("allRoles", roles);
-        return "admin/editUser";
+        return "admin/edituser";
     }
 
     @PostMapping("/update/{id}")
@@ -70,7 +70,7 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             List<Role> roles = userService.getAllRoles();
             model.addAttribute("allRoles", roles);
-            return "admin/editUser";
+            return "admin/edituser";
         }
         userService.updateUser(user.getId(), user);
         return "redirect:/admin";

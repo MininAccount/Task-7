@@ -29,6 +29,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByUsername(username);
 
@@ -65,11 +66,13 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    @Transactional
     public void updateUser(Long id, User user) {
         User updatedUser = userRepository.getById(id);
         if (updatedUser != null) {
             updatedUser.setName(user.getUsername());
             updatedUser.setEmail(user.getEmail());
+            updatedUser.setUsername(user.getUsername());
             String encodedPassword = passwordEncoder.encode(user.getPassword());
             updatedUser.setPassword(encodedPassword);
             updatedUser.setRoles(user.getRoles());
@@ -78,6 +81,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }

@@ -12,25 +12,21 @@
             <tr>
                 <td>User Name:</td>
                 <td><input type="text" th:field="*{name}"/></td>
-                <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">name Error
                 </td>
             </tr>
             <tr>
                 <td>User UserName:</td>
                 <td><input type="text" th:field="*{username}"/></td>
-                <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}">age Error
                 </td>
             </tr>
             <tr>
                 <td>User mail:</td>
                 <td><input type="text" th:field="*{email}"/></td>
-                <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email Error
                 </td>
             </tr>
             <tr>
                 <td>User password:</td>
                 <td><input type="text" th:field="*{password}"/></td>
-                <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">age Error
                 </td>
             </tr>
             <tr>
@@ -52,6 +48,8 @@
             </td>
         </table>
     </form>
+    <br/>
+    <a href="#" th:href="@{/logout}">Log Out</a>
 </div>
 </body>
 </html>
