@@ -1,7 +1,6 @@
 package ru.itmentor.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,10 +10,10 @@ import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.service.UserService;
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 public class AdminController {
     private final UserService userService;
 
@@ -39,7 +38,7 @@ public class AdminController {
     @GetMapping("/add")
     public String showAddUserForm(Model model) {
         User user = new User();
-        List<Role> roles = userService.getAllRoles();
+        Set<Role> roles = userService.getAllRoles();
         model.addAttribute("user", user);
         model.addAttribute("allRoles", roles);
         return "admin/adduser";
@@ -48,7 +47,7 @@ public class AdminController {
     @PostMapping("/save")
     public String saveUser(@ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            List<Role> roles = userService.getAllRoles();
+            Set<Role> roles = userService.getAllRoles();
             model.addAttribute("allRoles", roles);
             return "admin/adduser";
         }
@@ -59,7 +58,7 @@ public class AdminController {
     @GetMapping("/edit/{id}")
     public String showEditUserForm(@PathVariable(name = "id") Long id, Model model) {
         User user = userService.getUserById(id);
-        List<Role> roles = userService.getAllRoles();
+        Set<Role> roles = userService.getAllRoles();
         model.addAttribute("user", user);
         model.addAttribute("allRoles", roles);
         return "admin/edituser";
@@ -68,7 +67,7 @@ public class AdminController {
     @PostMapping("/update/{id}")
     public String updateUser(@PathVariable("id") Long id, @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            List<Role> roles = userService.getAllRoles();
+            Set<Role> roles = userService.getAllRoles();
             model.addAttribute("allRoles", roles);
             return "admin/edituser";
         }

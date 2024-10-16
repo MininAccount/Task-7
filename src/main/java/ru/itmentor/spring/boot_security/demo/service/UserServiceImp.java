@@ -13,6 +13,8 @@ import ru.itmentor.spring.boot_security.demo.repository.UserRepository;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImp implements UserService {
@@ -46,8 +48,8 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public List<Role> getAllRoles() {
-        return roleRepository.findAll();
+    public Set<Role> getAllRoles() {
+        return roleRepository.findAll().stream().collect(Collectors.toSet());
     }
 
     @Override

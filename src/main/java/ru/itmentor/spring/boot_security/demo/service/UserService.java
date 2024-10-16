@@ -5,11 +5,12 @@ import ru.itmentor.spring.boot_security.demo.model.Role;
 import ru.itmentor.spring.boot_security.demo.model.User;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService extends UserDetailsService {
     List<User> getAllUsers();
 
-    List<Role> getAllRoles();
+    Set<Role> getAllRoles();
 
     User getUserById(Long id);
 
