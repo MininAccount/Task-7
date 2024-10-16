@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.service.UserService;
@@ -23,8 +22,9 @@ public class AdminController {
     }
 
     @GetMapping
-    public List<User> showUsers(Model model) {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> showUsers(){
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
     @DeleteMapping("/delete/{id}")
