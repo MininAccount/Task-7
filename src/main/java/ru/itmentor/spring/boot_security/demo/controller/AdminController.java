@@ -1,19 +1,19 @@
 package ru.itmentor.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.itmentor.spring.boot_security.demo.model.Role;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.service.UserService;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
-@Controller
-@RequestMapping("/admin")
+@RestController
+@RequestMapping("/api/admin")
 public class AdminController {
     private final UserService userService;
 
@@ -23,55 +23,35 @@ public class AdminController {
     }
 
     @GetMapping
-    public String showUsersTable(Model model) {
-        List<User> userList = userService.getAllUsers();
-        model.addAttribute("usersList", userList);
-        return "admin/allusers";
+    public List<User> showUsers(Model model) {
+        return userService.getAllUsers();
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable("id") Long id) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
-        return "redirect:/admin";
-    }
-
-    @GetMapping("/add")
-    public String showAddUserForm(Model model) {
-        User user = new User();
-        Set<Role> roles = userService.getAllRoles();
-        model.addAttribute("user", user);
-        model.addAttribute("allRoles", roles);
-        return "admin/adduser";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/save")
-    public String saveUser(@ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            Set<Role> roles = userService.getAllRoles();
-            model.addAttribute("allRoles", roles);
-            return "admin/adduser";
+    public ResponseEntity<User> saveUser(@RequestBody @Valid User user) {
+        try {
+            userService.addUser(user);
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.badRequest().body(user);
         }
         userService.addUser(user);
-        return "redirect:/admin";
+        return ResponseEntity.ok().body(user);
     }
 
-    @GetMapping("/edit/{id}")
-    public String showEditUserForm(@PathVariable(name = "id") Long id, Model model) {
-        User user = userService.getUserById(id);
-        Set<Role> roles = userService.getAllRoles();
-        model.addAttribute("user", user);
-        model.addAttribute("allRoles", roles);
-        return "admin/edituser";
-    }
-
-    @PostMapping("/update/{id}")
-    public String updateUser(@PathVariable("id") Long id, @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            Set<Role> roles = userService.getAllRoles();
-            model.addAttribute("allRoles", roles);
-            return "admin/edituser";
+    @PutMapping("/update/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
+        try {
+            userService.updateUser(id,user);
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.badRequest().body(user);
         }
         userService.updateUser(user.getId(), user);
-        return "redirect:/admin";
+        return ResponseEntity.ok().body(user);
     }
 }
